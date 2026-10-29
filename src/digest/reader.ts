@@ -41,6 +41,7 @@ export const readNight: ReadNight = (runsDir, night) => {
 
   const jobs = new Map<string, { row: DigestRow; first: number; last: number; errorTime: number }>();
   let malformedLines = 0;
+  const statusCounts = { ok: 0, retry: 0, fail: 0 };
   const lines = contents.split(/\r?\n/);
   if (lines.at(-1) === '') lines.pop();
   for (const line of lines) {
@@ -49,6 +50,7 @@ export const readNight: ReadNight = (runsDir, night) => {
       malformedLines++;
       continue;
     }
+    statusCounts[entry.status]++;
     const time = Date.parse(entry.at);
     const existing = jobs.get(entry.job);
     if (!existing) {
@@ -74,5 +76,5 @@ export const readNight: ReadNight = (runsDir, night) => {
       row.lastError = entry.error;
     }
   }
-  return { rows: [...jobs.values()].map(({ row }) => row).sort((a, b) => a.job < b.job ? -1 : a.job > b.job ? 1 : 0), malformedLines };
+  return { rows: [...jobs.values()].map(({ row }) => row).sort((a, b) => a.job < b.job ? -1 : a.job > b.job ? 1 : 0), malformedLines, statusCounts };
 };

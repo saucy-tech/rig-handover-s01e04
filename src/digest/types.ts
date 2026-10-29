@@ -1,9 +1,12 @@
+export type EntryStatus = 'ok' | 'retry' | 'fail';
+export type StatusCounts = Record<EntryStatus, number>;
+
 export type DigestRow = {
   job: string;
   owner: string | null;
   runs: number;
   retries: number;
-  lastStatus: 'ok' | 'retry' | 'fail';
+  lastStatus: EntryStatus;
   lastError: string | null;
   firstTime: string;
   lastTime: string;
@@ -12,6 +15,7 @@ export type DigestRow = {
 export type NightDigest = {
   rows: DigestRow[];
   malformedLines: number;
+  statusCounts: StatusCounts;
 };
 
 // readNight(runsDir, night) returns null only when the night does not exist.
