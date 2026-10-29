@@ -29,9 +29,12 @@ export function readStatus(config: RigConfig): Status {
     adapter: config.adapter,
     installed: config.installed,
     lastBeat: lastBeat(),
-    nights: nightsOnDisk(config.runsDir).map((night) => ({
-      night,
-      statusCounts: readNight(config.runsDir, night)?.statusCounts ?? null,
-    })),
+    nights: nightsOnDisk(config.runsDir).map((night) => {
+      try {
+        return { night, statusCounts: readNight(config.runsDir, night)?.statusCounts ?? null };
+      } catch {
+        return { night, statusCounts: null };
+      }
+    }),
   };
 }
