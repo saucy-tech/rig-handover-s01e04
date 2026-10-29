@@ -28,7 +28,7 @@ describe('readNight', () => {
     const dir = tempDir();
     expect(readNight(dir, '2026-10-28')).toBeNull();
     writeFileSync(join(dir, '2026-10-28.jsonl'), '');
-    expect(readNight(dir, '2026-10-28')).toEqual({ rows: [], malformedLines: 0 });
+    expect(readNight(dir, '2026-10-28')).toEqual({ rows: [], malformedLines: 0, statusCounts: { ok: 0, retry: 0, fail: 0 } });
     expect(readNight(dir, '../outside')).toBeNull();
   });
 
@@ -42,7 +42,7 @@ describe('readNight', () => {
       { at: '2026-10-29T00:00:00Z', job: 'job', status: 'other', owner: null },
     ];
     writeFileSync(join(dir, '2026-10-28.jsonl'), entries.map((e) => JSON.stringify(e)).join('\n') + '\n');
-    expect(readNight(dir, '2026-10-28')).toEqual({ malformedLines: 2, rows: [{
+    expect(readNight(dir, '2026-10-28')).toEqual({ malformedLines: 2, statusCounts: { ok: 1, retry: 1, fail: 1 }, rows: [{
       job: 'job', owner: 'last', runs: 3, retries: 1, lastStatus: 'ok', lastError: 'later',
       firstTime: '2026-10-29T00:30:00+00:00', lastTime: '2026-10-29T02:30:00+01:00',
     }] });
