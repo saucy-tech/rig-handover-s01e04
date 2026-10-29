@@ -34,7 +34,7 @@ describe('digest API', () => {
     writeFileSync(join(runsDir, '2026-10-28.jsonl'), '');
     const empty = await app.request('/api/digest/2026-10-28');
     expect(empty.status).toBe(200);
-    expect(await empty.json()).toEqual({ rows: [], malformedLines: 0 });
+    expect(await empty.json()).toEqual({ rows: [], malformedLines: 0, statusCounts: { ok: 0, retry: 0, fail: 0 } });
     expect((await app.request('/api/digest/2026-10-29')).status).toBe(404);
   });
 });

@@ -68,7 +68,7 @@ describe('digest routes', () => {
     expect(page.status).toBe(200);
     expect(await page.text()).toMatch(/nothing ran/i);
     expect(api.status).toBe(200);
-    expect(await api.json()).toEqual({ rows: [], malformedLines: 0 });
+    expect(await api.json()).toEqual({ rows: [], malformedLines: 0, statusCounts: { ok: 0, retry: 0, fail: 0 } });
   });
 
   it('keeps valid jobs when a line is malformed', async () => {
